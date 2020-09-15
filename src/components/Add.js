@@ -1,131 +1,112 @@
 import React, { useState, useEffect } from "react";
-import { Form, FormGroup, Label, Input, FormText } from "reactstrap";
+import AddSub from "./AddSub";
+import firebaseDb from "../firebase";
 
-const Add = (props) => {
-  const initialFieldValues = {
-    productName: "",
-    piece: "",
-    perOne: "",
-    boxNumber: "",
-    boxType: "",
-  };
-
-  var [values, setValues] = useState(initialFieldValues);
+const Add = () => {
+  var [productObject, setProductObject] = useState(0);
+  var [currentId, setCurrentId] = useState("");
 
   useEffect(() => {
-    if (props.currentId == "") {
-      setValues({
-        ...initialFieldValues,
+    firebaseDb.child("product").on("value", (snapshot) => {
+      if (snapshot.val() != null) {
+        setProductObject({
+          ...snapshot.val(),
+        });
+      } else {
+        setProductObject({});
+      }
+    });
+  }, []);
+
+  const addOrEdit = (obj) => {
+    if (currentId == "") {
+      firebaseDb.child("product").push(obj, (err) => {
+        if (err) {
+          console.log(err);
+        } else {
+          setCurrentId("");
+        }
       });
     } else {
-      setValues({
-        ...props.productObject[props.currentId],
+      firebaseDb.child(`product/${currentId}`).set(obj, (err) => {
+        if (err) {
+          console.log(err);
+        } else {
+          setCurrentId("");
+        }
       });
     }
-  }, [props.currentId, props.productObject]);
-
-  const handleInputChange = (e) => {
-    var { name, value } = e.target;
-    setValues({
-      ...values,
-      [name]: value,
-    });
   };
-
-  const handleForSubmit = (e) => {
-    e.preventDefault();
-    props.addOrEdit(values);
+  const onDelete = (key) => {
+    if (window.confirm("Are you sure to delete this record ?")) {
+      firebaseDb.child(`product/${key}`).remove((err) => {
+        if (err) {
+          console.log(err);
+        } else {
+          setCurrentId("");
+        }
+      });
+    }
   };
 
   return (
-    <Form autoComplete="off" onSubmit={handleForSubmit}>
-      <div className="form-group input-group">
-        <div className="input-group-prepend">
-          <div className="input-group-text">
-            <i className="fas fa-user"></i>
-          </div>
-        </div>
-        <input
-          className="form-control"
-          placeholder="Product Name"
-          name="productName"
-          value={values.productName}
-          onChange={handleInputChange}
-        />
-      </div>
-      <div className="form-row">
-        <div className="form-group input-group col-md-6">
-          <div className="input-group-prepend">
-            <div className="input-group-text">
-              <i className="fas fa-user"></i>
-            </div>
-          </div>
-          <input
-            className="form-control"
-            placeholder="Product Piece"
-            name="piece"
-            type="number"
-            value={values.piece}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div className="form-group input-group col-md-6">
-          <div className="input-group-prepend">
-            <div className="input-group-text">
-              <span>$</span>
-            </div>
-          </div>
-          <input
-            className="form-control"
-            placeholder="Per One"
-            name="perOne"
-            type="number"
-            value={values.perOne}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div className="form-group input-group">
-          <div className="input-group-prepend">
-            <div className="input-group-text">
-              <i className="fas fa-user"></i>
-            </div>
-          </div>
-          <input
-            className="form-control"
-            placeholder="Box Number"
-            name="boxNumber"
-            type="number"
-            value={values.boxNumber}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div className="form-group input-group">
-          <div className="input-group-prepend">
-            <div className="input-group-text">
-              <i className="fas fa-user"></i>
-            </div>
-          </div>
-          <input
-            className="form-control"
-            placeholder="Box Type"
-            name="boxType"
-            type="text"
-            value={values.boxType}
-            onChange={handleInputChange}
-          />
+    <>
+      <div className="jumbotron jumbotron-fluid">
+        <div className="container">
+          <h1 className="display-6 text-center">Add and Edit Product</h1>
         </div>
       </div>
-      <div className="form-group">
-        <input
-          type="submit"
-          value={props.currentId == "" ? "Add" : "Update"}
-          className="btn btn-primary btn-block"
-        />
+      <div className="row">
+        <div className="col-md-5">
+          <AddSub {...{ addOrEdit, currentId, productObject }} />
+        </div>
+        <div className="col-md-7">
+          <table className="table table-borderless table-stripped">
+            <thead className="thead-dark">
+              <tr>
+                <th>Box Type</th>
+                <th>Box Number</th>
+                <th>Product Name</th>
+                <th>Piece</th>
+                <th>Per One</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.keys(productObject).map((id) => {
+                return (
+                  <tr key={id}>
+                    <td>{productObject[id].boxType}</td>
+                    <td>{productObject[id].boxNumber}</td>
+                    <td>{productObject[id].productName}</td>
+                    <td>{productObject[id].piece}</td>
+                    <td>{productObject[id].perOne}</td>
+                    <td>
+                      <a
+                        className="btn text-primary"
+                        onClick={() => {
+                          setCurrentId(id);
+                        }}
+                      >
+                        <i className="fas fa-pencil-alt"></i>
+                      </a>
+                      <a
+                        className="btn text-danger"
+                        onClick={() => {
+                          onDelete(id);
+                        }}
+                      >
+                        <i className="fas fa-trash-alt"></i>
+                      </a>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </Form>
+    </>
   );
 };
 

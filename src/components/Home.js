@@ -49,17 +49,24 @@ const Home = () => {
     }
   };
 
+  const calculate = (id) => {
+    {
+      Object.keys(productObject).map((id) => {
+        var ucret = productObject[id].piece;
+        console.log(ucret);
+      });
+    }
+  };
+
   return (
     <>
       <div className="jumbotron jumbotron-fluid">
         <div className="container">
-          <h1 className="display-6 text-center">List and Edit Product</h1>
+          <h1 className="display-6 text-center">List Product</h1>
         </div>
       </div>
       <div className="row">
-        <div className="col-md-5">
-          <AddForm {...{ addOrEdit, currentId, productObject }} />
-        </div>
+        <div className="col-md-3"></div>
         <div className="col-md-7">
           <table className="table table-borderless table-stripped">
             <thead className="thead-dark">
@@ -69,7 +76,7 @@ const Home = () => {
                 <th>Product Name</th>
                 <th>Piece</th>
                 <th>Per One</th>
-                <th>Action</th>
+                <th>Total Priece</th>
               </tr>
             </thead>
             <tbody>
@@ -81,24 +88,6 @@ const Home = () => {
                     <td>{productObject[id].productName}</td>
                     <td>{productObject[id].piece}</td>
                     <td>{productObject[id].perOne}</td>
-                    <td>
-                      <a
-                        className="btn text-primary"
-                        onClick={() => {
-                          setCurrentId(id);
-                        }}
-                      >
-                        <i className="fas fa-pencil-alt"></i>
-                      </a>
-                      <a
-                        className="btn text-danger"
-                        onClick={() => {
-                          onDelete(id);
-                        }}
-                      >
-                        <i className="fas fa-trash-alt"></i>
-                      </a>
-                    </td>
                   </tr>
                 );
               })}
