@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AddSub from "./AddSub";
 import firebaseDb from "../firebase";
+import add from "../add.css";
 
 const Add = () => {
   var [productObject, setProductObject] = useState(0);
@@ -51,7 +52,7 @@ const Add = () => {
 
   return (
     <>
-      <div className="jumbotron jumbotron-fluid">
+      <div className="jumbotron jumbotron-fluid porti">
         <div className="container">
           <h1 className="display-6 text-center">Add and Edit Product</h1>
         </div>

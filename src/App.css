@@ -1,9 +1,10 @@
 *{
     margin:0;
     padding:0;
+    font-family:sans-serif;
 }
 nav{
-    background-color: lightblue;
+    background: linear-gradient(90deg, rgba(2,4,6,1) 0%, rgba(33,35,41,1) 35%, rgba(69,68,74,1) 55%, rgba(122,121,126,1) 100%);
     display:flex;
     justify-content:space-between;
     padding:25px 40px;
@@ -18,3 +19,4 @@ nav li a {
     text-decoration:none;
     padding:10px 15px;
 }
+

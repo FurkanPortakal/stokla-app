@@ -7,7 +7,7 @@ import Add from "./components/Add";
 
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-function App() {
+function Loged() {
   return (
     <Fragment>
       <BrowserRouter>
@@ -22,4 +22,4 @@ function App() {
   );
 }
 
-export default App;
+export default Loged;

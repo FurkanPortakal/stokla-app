@@ -1,18 +1,11 @@
-*{
-    margin:0;
-    padding:0;
-}
-
-.Container{
+.porti{
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    background:#d6e0f0;
+    color: #393b44;
+    height: 10px;
 }
-.Container div {
-    width: auto;
-    margin-top:20px;
-}
-
-.Container div button {
-    float: right;
+tr,td {
+      border: 2px solid #f1f3f8;
 }

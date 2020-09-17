@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AddForm from "./AddForm";
 import firebaseDb from "../firebase";
+import add from "../add.css";
 
 const Home = () => {
   var [productObject, setProductObject] = useState(0);
@@ -49,19 +50,10 @@ const Home = () => {
     }
   };
 
-  const calculate = (id) => {
-    {
-      Object.keys(productObject).map((id) => {
-        var ucret = productObject[id].piece;
-        console.log(ucret);
-      });
-    }
-  };
-
   return (
     <>
-      <div className="jumbotron jumbotron-fluid">
-        <div className="container">
+      <div className="jumbotron jumbotron-fluid porti">
+        <div className="container ">
           <h1 className="display-6 text-center">List Product</h1>
         </div>
       </div>
@@ -88,6 +80,9 @@ const Home = () => {
                     <td>{productObject[id].productName}</td>
                     <td>{productObject[id].piece}</td>
                     <td>{productObject[id].perOne}</td>
+                    <td>
+                      {productObject[id].perOne * productObject[id].piece}
+                    </td>
                   </tr>
                 );
               })}
